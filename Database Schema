@@ -1,0 +1,76 @@
+Database Schema
+This document outlines the structure of the PostgreSQL database tables used by the FastAPI application.
+
+Table: videos
+Purpose: Stores metadata for all uploaded and processed video files.
+
+Fields:
+
+id: Integer (Primary Key) - Unique identifier for the video record.
+
+filename: String - The filename of the video.
+
+duration: Float - The duration of the video in seconds.
+
+size: Integer - The size of the video file in bytes.
+
+upload_time: DateTime - The timestamp when the video record was created.
+
+original_video_id: Integer (Foreign Key, Nullable) - Links a processed video back to its original source.
+
+Table: jobs
+Purpose: Tracks all asynchronous video processing tasks.
+
+Fields:
+
+id: Integer (Primary Key) - Unique identifier for the job.
+
+video_id: Integer (Foreign Key, Nullable) - The ID of the video the job is being run on.
+
+job_type: Enum (upload, trim, overlay, etc.) - The type of processing task.
+
+status: Enum (pending, processing, done, failed) - The current status of the job.
+
+created_at: DateTime - The timestamp when the job was created.
+
+completed_at: DateTime (Nullable) - The timestamp when the job finished.
+
+output_file: String (Nullable) - The file path of the processed output.
+
+start_time: Float (Nullable) - The start time for a trimming job.
+
+end_time: Float (Nullable) - The end time for a trimming job.
+
+Table: overlays
+Purpose: Stores the configuration for all video overlays.
+
+Fields:
+
+id: Integer (Primary Key) - Unique identifier for the overlay configuration.
+
+video_id: Integer (Foreign Key) - The ID of the video this overlay is for.
+
+type: Enum (text, image, video, etc.) - The type of overlay.
+
+content: Text - The text string or the filename for the overlay media.
+
+position: String - The position of the overlay on the video frame.
+
+start_time: Float - The time (in seconds) the overlay appears.
+
+end_time: Float - The time (in seconds) the overlay disappears.
+
+font_name: String (Nullable) - The filename of the font for text overlays.
+
+Table: video_versions
+Purpose: Stores metadata for different quality versions of a video.
+
+Fields:
+
+id: Integer (Primary Key) - Unique identifier for the video version.
+
+video_id: Integer (Foreign Key) - The ID of the original video.
+
+quality: Enum (1080p, 720p, 480p) - The quality of this video version.
+
+file_path: String - The file path to the version on disk.
